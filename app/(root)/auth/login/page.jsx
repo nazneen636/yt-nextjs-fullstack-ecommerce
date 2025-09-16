@@ -16,7 +16,7 @@ import Logo from "@/public/assets/images/logo-black.png";
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 // import { useForm } from "react-hook-form";
-import { loginSchema } from "@/app/lib/zodSchema";
+import { loginSchema } from "@/lib/zodSchema";
 import {
   Form,
   FormControl,
@@ -30,8 +30,10 @@ import { useForm } from "react-hook-form";
 import { ButtonLoading } from "@/components/Application/ButtonLoading";
 import z from "zod";
 import { useState } from "react";
+import { Icons } from "@/app/helpers/iconprovider";
 export default function Login() {
   const [loading, setLoading] = useState(false);
+  const [isTypePassword, setIsTypePassword] = useState(true);
   const formSchema = loginSchema
     .pick({
       email: true,
@@ -61,15 +63,14 @@ export default function Login() {
         />
       </div>
       <CardHeader>
-        <CardTitle className={"font-bold text-2xl"}>
-          Login to your account
-        </CardTitle>
-        <CardDescription>
-          Enter your email below to login to your account
-        </CardDescription>
-        <CardAction>
-          <Button variant="link">Sign Up</Button>
-        </CardAction>
+        <div className="flex items-center justify-center flex-col">
+          <CardTitle className={"font-bold text-2xl"}>
+            Login to your account
+          </CardTitle>
+          <CardDescription>
+            Enter your email below to login to your account
+          </CardDescription>
+        </div>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -83,7 +84,7 @@ export default function Login() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel className={"text-base"}>Email</FormLabel>
                     <FormControl>
                       <Input
                         type={"email"}
@@ -102,13 +103,29 @@ export default function Login() {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <FormLabel className={"text-base"}>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type={"password"}
-                        placeholder="Enter your password"
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          className={"text-base"}
+                          type={isTypePassword ? "password" : "text"}
+                          placeholder="Enter your password"
+                          {...field}
+                        />
+                        <div
+                          onClick={() => {
+                            setIsTypePassword(!isTypePassword);
+                            console.log("ok");
+                          }}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
+                        >
+                          {isTypePassword ? (
+                            <Icons.FaRegEyeSlash />
+                          ) : (
+                            <Icons.FaRegEye />
+                          )}
+                        </div>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -126,6 +143,16 @@ export default function Login() {
             </div>
           </form>
         </Form>
+        <div className="mt-4 text-center text-base text-gray-600">
+          Don't have an account?{" "}
+          <Button
+            variant="link"
+            className="p-0"
+            onClick={() => console.log("Redirect to Sign Up page")}
+          >
+            Sign Up
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

@@ -1,4 +1,4 @@
-import { connectDB } from "@/app/lib/database.connection";
+import { connectDB } from "@/lib/database.connection";
 import { NextResponse } from "next/server";
 
 export async function GET() {
